@@ -9,13 +9,10 @@ on:
       - main
 
 jobs:
-
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -30,23 +27,42 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Generate telemetry dataset
+        run: |
+          python simulator/telemetry_generator.py
+
+      - name: Preprocess telemetry
+        run: |
+          python ml/preprocess_dataset.py
+
+      - name: Train temperature prediction model
+        run: |
+          python ml/temperature_prediction.py
+
+      - name: Train anomaly detection model
+        run: |
+          python ml/anomaly_detection.py
+
+      - name: Run root cause analysis
+        run: |
+          python ml/root_cause_analysis.py
+
+      - name: Run cooling optimization
+        run: |
+          python optimization/cooling_optimizer.py
+
       - name: Run automated tests
         run: |
           pytest -v
 
-
   docker-build:
-
     runs-on: ubuntu-latest
-
     needs: test
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build Docker images
         run: |
           docker compose build
-          
