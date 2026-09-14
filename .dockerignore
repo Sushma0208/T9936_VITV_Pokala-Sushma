@@ -1,0 +1,13 @@
+venv/
+.git/
+.github/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.streamlit/
+.env
+.env.*
+*.log
